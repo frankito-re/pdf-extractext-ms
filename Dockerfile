@@ -16,4 +16,6 @@ COPY --from=builder /app/.venv /app/.venv
 COPY . .
 # uvicorn queda accesible sin necesidad de "uv run" (uv no existe en esta imagen).
 ENV PATH="/app/.venv/bin:$PATH"
-CMD ["uvicorn", "presentation.main:app", "--host", "0.0.0.0", "--port", "8000", "--reload"]
+# Sin --reload: la imagen es apta para producción. El autoreload de desarrollo
+# vive en docker-compose.override.yml.
+CMD ["uvicorn", "presentation.main:app", "--host", "0.0.0.0", "--port", "8000"]

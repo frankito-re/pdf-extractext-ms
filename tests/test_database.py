@@ -17,7 +17,7 @@ async def test_write_and_read_from_database():
     settings = DatabaseSettings()
 
     await init_beanie(
-        connection_string=f"{settings.db_url}/{settings.db_name}",
+        connection_string=f"{settings.url}/{settings.name}",
         document_models=[SampleDoc],
     )
 
