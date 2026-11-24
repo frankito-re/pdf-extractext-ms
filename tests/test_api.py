@@ -24,7 +24,7 @@ class BaseMockRepo:
 
 @pytest.mark.asyncio
 async def test_ping_server():
-    with patch("presentation.main.get_database_connection", new_callable=AsyncMock):
+    with patch("presentation.container.get_database_connection", new_callable=AsyncMock):
         async with AsyncClient(transport=ASGITransport(app=app), base_url="http://test") as ac:
             response = await ac.get("/health")
 

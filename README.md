@@ -24,10 +24,10 @@ El PDF nunca se escribe a disco en esta app.
 
 Clean Architecture (`presentation → application ← data`):
 
-- `application/pdf_extractor.py` — `Protocol` `PDFExtractor` y excepciones de dominio.
-- `data/extractor_client.py` — `HttpPDFExtractor`, cliente `httpx` del microservicio.
-- `data/` — modelos Beanie y repositorios de MongoDB.
-- `presentation/main.py` — app FastAPI, wiring de dependencias y mapeo de errores.
+- `application/` — puertos (`Protocol`: `PDFExtractor`, `ChecksumRepository`, `DocumentRepository`), excepciones de dominio y casos de uso (`extract_document`).
+- `data/` — adaptadores: `HttpPDFExtractor` (cliente `httpx` del microservicio), modelos Beanie y repositorios de MongoDB.
+- `presentation/main.py` — adaptador de entrada FastAPI: rutas contra puertos y mapeo de errores a HTTP.
+- `presentation/container.py` — composition root: único lugar que liga adaptadores concretos a puertos (`lifespan` y providers de `Depends`).
 
 ## Requisitos
 
