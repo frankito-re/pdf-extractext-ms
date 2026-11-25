@@ -68,9 +68,10 @@ def _doc_to_response(doc: DocumentDTO) -> dict:
 
 
 @app.get("/")
-async def root():
-    """Redirect to the Swagger UI at /docs."""
-    return RedirectResponse(url="/docs")
+async def root(request: Request):
+    """Redirect to the Swagger UI, honoring the proxy's root path."""
+    prefix = request.scope.get("root_path", "").rstrip("/")
+    return RedirectResponse(url=f"{prefix}/docs")
 
 @app.get("/health")
 async def health_check():
