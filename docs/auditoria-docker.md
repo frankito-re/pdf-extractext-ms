@@ -104,4 +104,24 @@ Nota sobre `--root-path`: `AGENTS.md` dice que el prefijo se pasa al arrancar. E
 8. **R8 (X)** Documentar en el `README.md` cómo se desarrolla con contenedor, ahora que el override no está.
 9. **R9** Ejecutar un escaneo de CVE (`trivy image`/`grype`) sobre la imagen y de dependencias (`uv.lock`); no se hizo en esta auditoría.
 
-Ningún cambio de esta lista se aplicó: esta rama solo contiene el informe.
+## Estado de las recomendaciones
+
+| # | Estado | Cómo se resolvió |
+| --- | --- | --- |
+| R1 | Aplicada | Usuario `app` (uid 10001) y `USER app`. El código queda de root y de solo lectura para el proceso, más estricto que `--chown`. Verificado: `touch /app/x` da `Permission denied`. |
+| R2 | Aplicada | `python:3.13.18-slim` y `uv:0.13.10`, ambos con digest. Para actualizar hay que cambiar tag y digest juntos. |
+| R3 | Aplicada | `HEALTHCHECK` contra `/health` con `python` (sin `curl`). Verificado: el contenedor pasa a `healthy` en ~9 s con Mongo. |
+| R4 | Aplicada | `COPY` solo de `application/`, `data/` y `presentation/`; `.dockerignore` ampliado (`.env.*`, `*.pem`, `*.key`, `docs/`, `.github/`, `AGENTS.md`, `LICENSE`, `Dockerfile`). La imagen solo contiene `.venv` y esas tres carpetas. |
+| R5 | Aplicada | Comentario del `Dockerfile` corregido. |
+| R6 | Aplicada | `AGENTS.md` §3 apunta a `presentation/container.py`. |
+| R7 | **Parcial** | Job `docker-build` agregado al CI. **Pendiente:** fijar las acciones por SHA (requiere consultar los SHA actuales en GitHub). |
+| R8 | Pendiente | El `README.md` ya documenta el desarrollo con `uv run uvicorn --reload`; falta decidir si se documenta un flujo con contenedor. |
+| R9 | Pendiente | Escaneo de CVE no realizado (sin `trivy`/`grype`). |
+
+Detalle: se agregó `PYTHONDONTWRITEBYTECODE=1` porque el usuario `app` no puede
+escribir `__pycache__` en `/app`. En `.dockerignore` los patrones de caché usan
+`**/` porque sin ese prefijo solo aplican a la raíz y `application/`, `data/` y
+`presentation/` se copian completos.
+
+Verificación: `docker build` correcto, contenedor sano contra un MongoDB
+desechable y `pytest` con 39 tests en verde.
