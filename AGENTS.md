@@ -60,7 +60,7 @@ de orden de ejecución o de estado compartido.
   - *LSP*: toda implementación de un `Protocol` debe ser sustituible.
   - *ISP*: interfaces chicas; no exponer métodos que nadie usa.
   - *DIP*: los endpoints dependen de `Protocol`s; la implementación concreta se
-    inyecta solo en el wiring (`presentation/main.py`).
+    inyecta solo en el wiring (`presentation/container.py`).
 - **KISS**: la solución más simple que cumpla el requisito.
 - **YAGNI**: no se agregan campos, endpoints, abstracciones ni dependencias que
   la consigna no pida.

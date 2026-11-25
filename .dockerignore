@@ -1,12 +1,29 @@
+# Control de versiones y entornos locales
 .git
 .gitignore
 .venv
-__pycache__/
-*.pyc
-.pytest_cache
-.ruff_cache
-tests/
-.env
 .claude/
 .vscode/
 .idea/
+
+# Secretos: nunca deben llegar al contexto de build ni a la imagen
+.env
+.env.*
+*.pem
+*.key
+
+# Basura de Python. "**/" porque en .dockerignore un patron sin prefijo solo
+# aplica a la raiz y application/, data/ y presentation/ se copian enteros.
+**/__pycache__/
+**/*.pyc
+.pytest_cache
+.ruff_cache
+
+# No son runtime
+tests/
+docs/
+.github/
+AGENTS.md
+LICENSE
+Dockerfile
+.dockerignore
