@@ -39,3 +39,13 @@ jobs:
 
       - name: Run tests
         run: uv run pytest
+
+  # Detecta un Dockerfile roto antes de llegar al deploy: solo construye, no publica.
+  docker-build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: docker build -t pdf-extractext-ms:ci .
